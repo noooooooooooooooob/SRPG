@@ -1,0 +1,459 @@
+fileFormatVersion: 2
+guid: 5cc721b2e5820724ea9bb14a09844736
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 5066367195156081056
+    second: B_witch_Attack-Sheet_0
+  - first:
+      213: -1411195138453580723
+    second: B_witch_Attack-Sheet_1
+  - first:
+      213: -2538033505874422221
+    second: B_witch_Attack-Sheet_2
+  - first:
+      213: 3892013223068525143
+    second: B_witch_Attack-Sheet_3
+  - first:
+      213: 1808131055139322747
+    second: B_witch_Attack-Sheet_4
+  - first:
+      213: 934284923926410138
+    second: B_witch_Attack-Sheet_5
+  - first:
+      213: 6570736563822740820
+    second: B_witch_Attack-Sheet_6
+  - first:
+      213: -1647625846270602820
+    second: B_witch_Attack-Sheet_7
+  - first:
+      213: 7915529721258043190
+    second: B_witch_Attack-Sheet_8
+  - first:
+      213: 7626559182235981568
+    second: B_witch_Attack-Sheet_9
+  - first:
+      213: -6842770217183337107
+    second: B_witch_Attack-Sheet_10
+  - first:
+      213: 4915210977301066490
+    second: B_witch_Attack-Sheet_11
+  - first:
+      213: -5606912988105071545
+    second: B_witch_Attack-Sheet_12
+  - first:
+      213: -6247827236617408926
+    second: B_witch_Attack-Sheet_13
+  - first:
+      213: -4600674887713369542
+    second: B_witch_Attack-Sheet_14
+  - first:
+      213: -739451481238340473
+    second: B_witch_Attack-Sheet_15
+  - first:
+      213: -1845466959207196102
+    second: B_witch_Attack-Sheet_16
+  - first:
+      213: 8940989286908038710
+    second: B_witch_Attack-Sheet_17
+  - first:
+      213: -8319322282820106367
+    second: B_witch_Attack-Sheet_18
+  - first:
+      213: -390421919947824006
+    second: B_witch_Attack-Sheet_19
+  - first:
+      213: 3465864928559339714
+    second: B_witch_Attack-Sheet_20
+  - first:
+      213: -8580544466927661743
+    second: B_witch_Attack-Sheet_21
+  - first:
+      213: -7725319420797810591
+    second: B_witch_Attack-Sheet_22
+  - first:
+      213: 118966616887186240
+    second: B_witch_Attack-Sheet_23
+  - first:
+      213: 7151401929247112598
+    second: B_witch_Attack-Sheet_24
+  - first:
+      213: -1177090141774365117
+    second: B_witch_Attack-Sheet_25
+  - first:
+      213: 8513292202098614161
+    second: B_witch_Attack-Sheet_26
+  - first:
+      213: -36030473058975093
+    second: B_witch_Attack-Sheet_27
+  - first:
+      213: 6818147646893575737
+    second: B_witch_Attack-Sheet_28
+  - first:
+      213: 6183321931228568812
+    second: B_witch_Attack-Sheet_29
+  - first:
+      213: 5768096933289756991
+    second: B_witch_Attack-Sheet_30
+  - first:
+      213: 3323552647932950369
+    second: B_witch_Attack-Sheet_31
+  - first:
+      213: -4194943935646257373
+    second: B_witch_Attack-Sheet_32
+  - first:
+      213: -5787531131816166061
+    second: B_witch_Attack-Sheet_33
+  - first:
+      213: 6056269854063411593
+    second: B_witch_Attack-Sheet_34
+  - first:
+      213: 3628190441572721447
+    second: B_witch_Attack-Sheet_35
+  - first:
+      213: 5264207700440476124
+    second: B_witch_Attack-Sheet_36
+  - first:
+      213: 6695189783416536775
+    second: B_witch_Attack-Sheet_37
+  - first:
+      213: 2959514054214374564
+    second: B_witch_Attack-Sheet_38
+  - first:
+      213: 6495281502143164083
+    second: B_witch_Attack-Sheet_39
+  - first:
+      213: -323634445925594059
+    second: B_witch_Attack-Sheet_40
+  - first:
+      213: -8400692595286748931
+    second: B_witch_Attack-Sheet_41
+  - first:
+      213: 862115013732924758
+    second: B_witch_Attack-Sheet_42
+  - first:
+      213: -1883613150404726356
+    second: B_witch_Attack-Sheet_43
+  - first:
+      213: 3366109567099414729
+    second: B_witch_Attack-Sheet_44
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 32
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: B_witch_Attack-Sheet_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 111
+        height: 48
+      alignment: 6
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1ea68fcbfa08ba74883bf722d2259d3d
+      internalID: 5066367195156081056
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: B_witch_Attack-Sheet_1
+      rect:
+        serializedVersion: 2
+        x: 111
+        y: 0
+        width: 111
+        height: 48
+      alignment: 6
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7f675477ce6135747b8e8ab7226d259b
+      internalID: -1411195138453580723
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: B_witch_Attack-Sheet_2
+      rect:
+        serializedVersion: 2
+        x: 222
+        y: 0
+        width: 111
+        height: 48
+      alignment: 6
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a697c1e663f983e4dacd5986f45ac2dc
+      internalID: -2538033505874422221
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: B_witch_Attack-Sheet_3
+      rect:
+        serializedVersion: 2
+        x: 333
+        y: 0
+        width: 111
+        height: 48
+      alignment: 6
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 369a50267f1bfab4aa51e203ac220ead
+      internalID: 3892013223068525143
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: B_witch_Attack-Sheet_4
+      rect:
+        serializedVersion: 2
+        x: 444
+        y: 0
+        width: 111
+        height: 48
+      alignment: 6
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b84e7c5359f493046a273379698bc3bb
+      internalID: 1808131055139322747
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: B_witch_Attack-Sheet_5
+      rect:
+        serializedVersion: 2
+        x: 555
+        y: 0
+        width: 111
+        height: 48
+      alignment: 6
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fb64326614e8b444c8a7c97384f9c79c
+      internalID: 934284923926410138
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: B_witch_Attack-Sheet_6
+      rect:
+        serializedVersion: 2
+        x: 666
+        y: 0
+        width: 111
+        height: 48
+      alignment: 6
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6e6f9365ce1234841b58f0974d4c620c
+      internalID: 6570736563822740820
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: B_witch_Attack-Sheet_7
+      rect:
+        serializedVersion: 2
+        x: 777
+        y: 0
+        width: 111
+        height: 48
+      alignment: 6
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f8f1c452de6c0cf4e82f58a5bc1d1461
+      internalID: -1647625846270602820
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: B_witch_Attack-Sheet_8
+      rect:
+        serializedVersion: 2
+        x: 888
+        y: 0
+        width: 111
+        height: 48
+      alignment: 6
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1f85630c3e12e914b8a4e7b8799b486d
+      internalID: 7915529721258043190
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 7ea91d89356165542a8a2413fa48b46a
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      B_witch_Attack-Sheet_0: 5066367195156081056
+      B_witch_Attack-Sheet_1: -1411195138453580723
+      B_witch_Attack-Sheet_2: -2538033505874422221
+      B_witch_Attack-Sheet_3: 3892013223068525143
+      B_witch_Attack-Sheet_4: 1808131055139322747
+      B_witch_Attack-Sheet_5: 934284923926410138
+      B_witch_Attack-Sheet_6: 6570736563822740820
+      B_witch_Attack-Sheet_7: -1647625846270602820
+      B_witch_Attack-Sheet_8: 7915529721258043190
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

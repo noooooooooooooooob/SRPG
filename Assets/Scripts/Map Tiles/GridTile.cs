@@ -8,6 +8,7 @@ public class GridTile : MonoBehaviour
     private SpriteRenderer spriteRenderer;
     public System.Action OnTileClicked;
     public Character currentCharacter;
+    bool isHighlighted = false; // 행동하고 있을 시
 
     void Awake()
     {
@@ -16,11 +17,18 @@ public class GridTile : MonoBehaviour
 
     public void SetHighlight(bool on)
     {
-        spriteRenderer.color = on ? Color.red : Color.white;
+        if(!isHighlighted)
+            spriteRenderer.color = on ? Color.blue : Color.white;
     }
     public void SetCanGo(bool on)
     {
         spriteRenderer.color = on ? Color.green : Color.white;
+        isHighlighted = on;
+    }
+    public void SetCanAttack(bool on)
+    {
+        spriteRenderer.color = on ? Color.red : Color.white;
+        isHighlighted = on;
     }
     void OnMouseDown()
     {

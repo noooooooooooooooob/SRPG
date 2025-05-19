@@ -3,6 +3,7 @@ using Microsoft.Unity.VisualStudio.Editor;
 using NUnit.Framework;
 using UnityEngine;
 using DG.Tweening;
+using UnityEditor.Rendering;
 
 public class Character : MonoBehaviour
 {
@@ -30,31 +31,55 @@ public class Character : MonoBehaviour
 
     [Header("UI")]
     public GameObject actionPanel; // 캐릭터 전용 UI
-    private CanvasGroup panelCanvasGroup; // UI 애니메이션용
+    public GameObject actionPanelReturnPanel; // 행동 취소
+    private CanvasGroup actionPanelCanvasGroup; // UI 애니메이션용
+    private CanvasGroup actionPanelReturnPanelCanvasGroup; // UI 애니메이션용
     private Vector3 originalScale; // UI 애니메이션용
     public UnityEngine.UI.Image turnGaugeImage;
     public UnityEngine.UI.Image HPBarImage;
     public bool HasSelectedAction = false;
     [Header("Tiles")]
     private List<GridTile> movableTiles = new();
+    private List<GridTile> attackableTiles = new();
     private Dictionary<GridTile, GridTile> cameFrom = new();
     private List<GridTile> pathToTarget = new();
     public GridTile currentTile;
+    [Header("Animation")]
+    Animator animator;
+    public Sprite hitSprite;
+    Character attackTargetCharacter;
+    public bool isDie = false;
+    TurnManager turnManager;
+    MapManager mapManager;
+    SpriteRenderer spriteRenderer;
     void Start()
     {
+        animator = GetComponent<Animator>();
+        turnManager = FindObjectOfType<TurnManager>();
+        mapManager = FindObjectOfType<MapManager>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
         if (actionPanel != null)
         {
             // 원래 스케일 저장
             originalScale = actionPanel.transform.localScale;
 
             // CanvasGroup 확인
-            panelCanvasGroup = actionPanel.GetComponent<CanvasGroup>();
-            if (panelCanvasGroup == null)
-                panelCanvasGroup = actionPanel.AddComponent<CanvasGroup>();
+            actionPanelCanvasGroup = actionPanel.GetComponent<CanvasGroup>();
+            if (actionPanelCanvasGroup == null)
+                actionPanelCanvasGroup = actionPanel.AddComponent<CanvasGroup>();
 
-            // 초기 상태: 안 보이게 설정 (스케일은 그대로!)
-            panelCanvasGroup.alpha = 0f;
+            // 초기 상태: 안 보이게 설정
+            actionPanelCanvasGroup.alpha = 0f;
             actionPanel.SetActive(false);
+
+            // CanvasGroup 확인
+            actionPanelReturnPanelCanvasGroup = actionPanelReturnPanel.GetComponent<CanvasGroup>();
+            if (actionPanelReturnPanelCanvasGroup == null)
+                actionPanelReturnPanelCanvasGroup = actionPanelReturnPanel.AddComponent<CanvasGroup>();
+
+            // 초기 상태: 안 보이게 설정
+            actionPanelReturnPanelCanvasGroup.alpha = 0f;
+            actionPanelReturnPanel.SetActive(false);
         }
     }
     public void InitializeFromData()
@@ -81,9 +106,9 @@ public class Character : MonoBehaviour
 
         ResetGauge();
     }
-    public void IncreaseGauge(float deltaTime)
+    public void IncreaseGauge(float amount)
     {
-        turnGauge = Mathf.Min(100f, turnGauge + SPEED * deltaTime);
+        turnGauge = Mathf.Min(100f, turnGauge + SPEED * amount);
         turnGaugeImage.fillAmount = turnGauge / 100f;
     }
 
@@ -92,24 +117,45 @@ public class Character : MonoBehaviour
         if (show)
         {
             actionPanel.SetActive(true);
-            panelCanvasGroup.alpha = 0f;
-            panelCanvasGroup.blocksRaycasts = true; // 클릭 막기 활성화
-            panelCanvasGroup.DOFade(1f, 0.3f);
+            actionPanelCanvasGroup.alpha = 0f;
+            actionPanelCanvasGroup.blocksRaycasts = true; // 클릭 막기 활성화
+            actionPanelCanvasGroup.DOFade(1f, 0.3f);
             actionPanel.transform.localScale = originalScale * 0.8f;
             actionPanel.transform.DOScale(originalScale, 0.3f).SetEase(Ease.OutBack);
         }
         else
         {
-            panelCanvasGroup.blocksRaycasts = false; // 클릭 막기 비활성화
-            panelCanvasGroup.DOFade(0f, 0.2f);
+            actionPanelCanvasGroup.blocksRaycasts = false; // 클릭 막기 비활성화
+            actionPanelCanvasGroup.DOFade(0f, 0.2f);
             actionPanel.transform.DOScale(originalScale * 0.8f, 0.2f)
                 .SetEase(Ease.InBack)
                 .OnComplete(() => actionPanel.SetActive(false));
         }
     }
+    public void ShowActionReturnUI(bool show)
+    {
+        if (show)
+        {
+            actionPanelReturnPanel.SetActive(true);
+            actionPanelReturnPanelCanvasGroup.alpha = 0f;
+            actionPanelReturnPanelCanvasGroup.blocksRaycasts = true;
+            actionPanelReturnPanelCanvasGroup.DOFade(1f, 0.3f);
+            actionPanelReturnPanel.transform.localScale = originalScale * 0.8f;
+            actionPanelReturnPanel.transform.DOScale(originalScale, 0.3f).SetEase(Ease.OutBack);
+        }
+        else
+        {
+            actionPanelReturnPanelCanvasGroup.blocksRaycasts = false;
+            actionPanelReturnPanelCanvasGroup.DOFade(0f, 0.2f);
+            actionPanelReturnPanel.transform.DOScale(originalScale * 0.8f, 0.2f)
+                .SetEase(Ease.InBack)
+                .OnComplete(() => actionPanelReturnPanel.SetActive(false));
+        }
+    }
     public void SelectAction() // 버튼에 연결 -> 캐릭터의 행동 종료
     {
         HasSelectedAction = true;
+        ShowActionReturnUI(false);
         ResetGauge();
     }
     public void ResetGauge()
@@ -123,19 +169,116 @@ public class Character : MonoBehaviour
     {
         curHP = Mathf.Max(0, curHP - damage);
         HPBarImage.fillAmount = (float)curHP / MaxHP;
+        if (curHP <= 0)
+        {
+            isDie = true;
+            turnManager.isActing = true;
+            animator.SetTrigger("Die");
+            ResetGauge();
+            turnManager.removeDeadCharacter(this);
+        }
+    }
+    public void DieCharacter()
+    {
+        turnManager.isActing = false;
+        gameObject.SetActive(false);
     }
     public void Heal(int healAmount)
     {
         curHP = Mathf.Min(MaxHP, curHP + healAmount);
         HPBarImage.fillAmount = (float)curHP / MaxHP;
     }
+    public void SPHeal(int healAmount)
+    {
+        curSP = Mathf.Min(MaxSP, curSP + healAmount);
+    }
     public void OnClickMove() // Move 클릭 시
     {
         ShowActionUI(false); // UI 닫기
-        MapManager map = FindObjectOfType<MapManager>();
-        ShowMovableTiles(map);
+        ShowActionReturnUI(true);
+        ShowMovableTiles();
     }
-    public void ShowMovableTiles(MapManager map)
+    public void OnClickAttack() // Attack 클릭 시
+    {
+        ShowActionUI(false); // UI 닫기
+        ShowActionReturnUI(true);
+        ShowAttackableTiles();
+    }
+    public void OnClickRest() // Rest 클릭 시
+    {
+        ShowActionUI(false); // UI 닫기
+        SPHeal(30);
+        ResetGauge();
+    }
+    public void OnClickReturn() // 행동 취소 시
+    {
+        ShowActionReturnUI(false);
+        ClearPreviousTiles();
+        ShowActionUI(true);
+    }
+    public void ShowAttackableTiles()
+    {
+        ClearPreviousTiles();
+
+        int range = ATKRange;
+        Queue<(int x, int y, int dist)> queue = new();
+        HashSet<GridTile> visited = new();
+
+        int originX = currentTile.x;
+        int originY = currentTile.y;
+
+        GridTile[,] grid = mapManager.grid; // 반드시 map에 grid 접근 가능해야 함
+        int width = mapManager.width;
+        int height = mapManager.height;
+
+        // 4방향
+        int[] dx = { 1, -1, 0, 0 };
+        int[] dy = { 0, 0, 1, -1 };
+        for (int i = 0; i < 4; i++)
+        {
+            int nx = originX + dx[i];
+            int ny = originY + dy[i];
+
+            if (nx < 0 || ny < 0 || nx >= width || ny >= height)
+                continue;
+
+            GridTile next = grid[nx, ny];
+
+            if (visited.Contains(next))
+                continue;
+
+            visited.Add(next);
+            queue.Enqueue((nx, ny, 1));
+        }
+        while (queue.Count > 0)
+        {
+            var (x, y, dist) = queue.Dequeue();
+            if (dist > range) continue;
+
+            GridTile tile = grid[x, y];
+            attackableTiles.Add(tile);
+            tile.SetCanAttack(true);
+            tile.OnTileClicked = () => AttackTo(tile); // 클릭 시 공격
+
+            for (int i = 0; i < 4; i++)
+            {
+                int nx = x + dx[i];
+                int ny = y + dy[i];
+
+                if (nx < 0 || ny < 0 || nx >= width || ny >= height)
+                    continue;
+
+                GridTile next = grid[nx, ny];
+
+                if (visited.Contains(next))
+                    continue;
+
+                visited.Add(next);
+                queue.Enqueue((nx, ny, dist + 1));
+            }
+        }
+    }
+    public void ShowMovableTiles()
     {
         ClearPreviousTiles();
 
@@ -146,9 +289,9 @@ public class Character : MonoBehaviour
         int originX = currentTile.x;
         int originY = currentTile.y;
 
-        GridTile[,] grid = map.grid; // 반드시 map에 grid 접근 가능해야 함
-        int width = map.width;
-        int height = map.height;
+        GridTile[,] grid = mapManager.grid; // 반드시 map에 grid 접근 가능해야 함
+        int width = mapManager.width;
+        int height = mapManager.height;
 
         // 4방향
         int[] dx = { 1, -1, 0, 0 };
@@ -203,11 +346,16 @@ public class Character : MonoBehaviour
             }
         }
     }
-    private void ClearPreviousTiles()
+    private void ClearPreviousTiles() // 하이라이트 타일 전부 비우기
     {
         foreach (var tile in movableTiles)
         {
             tile.SetCanGo(false);
+            tile.OnTileClicked = null;
+        }
+        foreach (var tile in attackableTiles)
+        {
+            tile.SetCanAttack(false);
             tile.OnTileClicked = null;
         }
         movableTiles.Clear();
@@ -222,5 +370,38 @@ public class Character : MonoBehaviour
 
         ClearPreviousTiles();
         SelectAction();
+    }
+    public void AttackTo(GridTile targetTile)
+    {
+        if (targetTile.currentCharacter == null) return;
+        attackTargetCharacter = targetTile.currentCharacter;
+        PlayAttackAnimation();
+
+        ClearPreviousTiles();
+        SelectAction();
+    }
+
+    // Animations
+    public void Hit()
+    {
+        spriteRenderer.sprite = hitSprite;
+    }
+    public void ReturnByHit()
+    {
+        animator.SetTrigger("Idle");
+    }
+    public void PlayAttackAnimation()
+    {
+        if (attackTargetCharacter.gridPos.x < this.gridPos.x || attackTargetCharacter.gridPos.y < this.gridPos.y)
+            transform.localScale = new Vector3(-1, 1, 1);
+        animator.SetTrigger("Attack");
+        attackTargetCharacter.Hit();
+        turnManager.isActing = true;
+    }
+    public void AnimationEnd()
+    {
+        turnManager.isActing = false;
+        attackTargetCharacter.ReturnByHit();
+        attackTargetCharacter.TakeDamage(ATK);
     }
 }

@@ -10,17 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ac6fe06e5b291cf45b203a588d1971d9, type: 3}
-  m_Name: Knight
+  m_Name: Witch
   m_EditorClassIdentifier: 
-  Name: Knight
-  portrait: {fileID: -1859981449166583538, guid: 841af1f4ad5f3c449bfebd135a5e93ac, type: 3}
+  Name: Witch
+  portrait: {fileID: -4574833102227651839, guid: f84d4d6970792e146b24b4e0049411ca, type: 3}
   HP: 100
   SP: 100
-  SPEED: 100
-  ATK: 100
-  ATKRange: 1
+  SPEED: 30
+  ATK: 10
+  ATKRange: 10
   MAG: 10
-  DEF: 10
-  AGI: 15
-  CRI: 10
+  DEF: 0
+  AGI: 3
+  CRI: 3
   basicSkill: {fileID: 0}

@@ -23,6 +23,7 @@ public class UIManager : MonoBehaviour
         Portrait.sprite = character.basicData.portrait;
         nameText.text = character.name;
         hpText.text = $"HP: {character.curHP} / {character.MaxHP}";
+        spText.text = $"SP: {character.curSP} / {character.MaxSP}";
     }
 
     public void HideCharacterInfo()

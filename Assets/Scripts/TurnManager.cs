@@ -16,9 +16,11 @@ public class TurnManager : MonoBehaviour
     public TurnState curState = TurnState.Generate;
     public MapManager mapManager;
     public CharacterSpawner characterSpawner;
+    public CameraController cameraController;
 
     private List<Character> allCharacters = new();
     private Character currentCharacter;
+    public bool isActing = false;
     void Awake()
     {
         StartCoroutine(TurnStateMachine());
@@ -56,32 +58,49 @@ public class TurnManager : MonoBehaviour
     }
     IEnumerator HandleReadyState()
     {
+        float tickInterval = 0.01f;
+        float lastTime = Time.time;
+
         while (curState == TurnState.Ready)
         {
-            foreach (var ch in allCharacters)
-            {
-                ch.IncreaseGauge(Time.deltaTime);
+            float now = Time.time;
+            float elapsed = now - lastTime;
 
-                if (ch.CanAct())
+            if (elapsed >= tickInterval)
+            {
+                foreach (var ch in allCharacters)
                 {
-                    currentCharacter = ch;
-                    curState = TurnState.Acting;
-                    yield break;
+                    if (ch == null || ch.isDie) continue;
+                    ch.IncreaseGauge(elapsed); // 실제 흐른 시간만큼 증가
+                    if (ch.CanAct())
+                    {
+                        currentCharacter = ch;
+                        curState = TurnState.Acting;
+                        yield break;
+                    }
                 }
+                lastTime = now;
             }
+
             yield return null;
         }
     }
     IEnumerator HandleActingState()
     {
         Debug.Log($" {currentCharacter.name} 행동 선택 대기");
+        cameraController.ZoomToCharacterTile(currentCharacter.currentTile);
 
         currentCharacter.HasSelectedAction = false; // 초기화 필요
         currentCharacter.ShowActionUI(true); // 패널 띄우기
         yield return new WaitUntil(() => currentCharacter.HasSelectedAction);
         currentCharacter.ShowActionUI(false); //  패널 숨기기
 
+        yield return new WaitUntil(() => !isActing);
         curState = TurnState.Ready;
         yield return null;
+    }
+    public void removeDeadCharacter(Character dead)
+    {
+        allCharacters.Remove(dead);
     }
 }

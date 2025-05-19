@@ -80,6 +80,19 @@ public class CameraController : MonoBehaviour
             }
         }
     }
+    public void ZoomToCharacterTile(GridTile tile)
+    {
+        if (tile == null) return;
+
+        Vector3 target = ClampToBounds(new Vector3(tile.transform.position.x, tile.transform.position.y, cam.transform.position.z));
+
+        // 타일 위치로 카메라 이동
+        cam.transform.DOMove(target, zoomDuration).SetEase(Ease.OutCubic);
+
+        // 줌인
+        DOTween.To(() => cam.orthographicSize, x => cam.orthographicSize = x, zoomedSize, zoomDuration)
+               .OnUpdate(ClampCameraToBounds);
+    }
 
     // 휠 줌 + 위치 보정
     void HandleScrollZoom()

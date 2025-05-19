@@ -13,7 +13,7 @@ public class CharacterSpawner : MonoBehaviour
             Vector2Int pos = GetRandomWalkablePosition();
             GridTile tile = GetTile(pos);
             if (tile == null) continue;
-
+            
             Vector3 tilePos = tile.transform.position;
             Vector3 spawnPos = new Vector3(tilePos.x, tilePos.y, tilePos.z - 0.01f);
 
@@ -40,6 +40,7 @@ public class CharacterSpawner : MonoBehaviour
             int y = Random.Range(0, mapManager.height);
 
             GridTile tile = GetTile(new Vector2Int(x, y));
+            if(tile.currentCharacter != null)   continue; // 캐릭터 중복 방지
             return new Vector2Int(x, y);
         }
 
