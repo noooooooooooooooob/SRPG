@@ -1,6 +1,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Collections;
+using DG.Tweening;
+using UnityEngine.UI;
+using TMPro;
+using System.Collections;
 
 public enum TurnState
 {
@@ -20,11 +24,17 @@ public class TurnManager : MonoBehaviour
 
     private List<Character> allCharacters = new();
     private Character currentCharacter;
+    private List<Character> turnQueue = new(); // 턴을 잡을 캐릭터들
     public bool isActing = false;
+
+    [Header("Stage Effect UI")]
+    public CanvasGroup fadeGroup;         // 검은 화면
+    public TextMeshProUGUI stageText;     // "STAGE 1 START" 텍스트
     void Awake()
     {
         StartCoroutine(TurnStateMachine());
     }
+
     IEnumerator TurnStateMachine()
     {
         while (true)
@@ -33,6 +43,7 @@ public class TurnManager : MonoBehaviour
             {
                 case TurnState.Generate:
                     Debug.Log("🛠 맵 생성 중...");
+                    yield return StartCoroutine(PlayStageIntroEffect());
                     yield return StartCoroutine(mapManager.GenerateMapCoroutine());
 
                     foreach (var ch in characterSpawner.spawnedCharacters)
@@ -56,6 +67,36 @@ public class TurnManager : MonoBehaviour
             yield return null;
         }
     }
+    // 스테이지 시작시 예시 연출
+    IEnumerator PlayStageIntroEffect()
+    {
+        fadeGroup.alpha = 0;
+        fadeGroup.gameObject.SetActive(true);
+        stageText.gameObject.SetActive(true);
+
+        stageText.text = $"STAGE 1 START";
+        stageText.alpha = 0;
+
+        Sequence seq = DOTween.Sequence();
+
+        // 페이드 인 + 텍스트 등장
+        seq.Append(fadeGroup.DOFade(1, 0.8f));
+        seq.Join(stageText.DOFade(1, 0.8f));
+
+        // 잠시 정지
+        seq.AppendInterval(1.2f);
+
+        // 텍스트 사라짐 + 페이드 아웃
+        seq.Append(stageText.DOFade(0, 0.5f));
+        seq.Join(fadeGroup.DOFade(0, 0.5f));
+
+        seq.Play();
+
+        yield return seq.WaitForCompletion();
+
+        fadeGroup.gameObject.SetActive(false);
+        stageText.gameObject.SetActive(false);
+    }
     IEnumerator HandleReadyState()
     {
         float tickInterval = 0.01f;
@@ -71,15 +112,20 @@ public class TurnManager : MonoBehaviour
                 foreach (var ch in allCharacters)
                 {
                     if (ch == null || ch.isDie) continue;
-                    ch.IncreaseGauge(elapsed); // 실제 흐른 시간만큼 증가
-                    if (ch.CanAct())
+                    ch.IncreaseGauge(elapsed);
+
+                    if (ch.CanAct() && !turnQueue.Contains(ch))
                     {
-                        currentCharacter = ch;
-                        curState = TurnState.Acting;
-                        yield break;
+                        turnQueue.Add(ch);
                     }
                 }
                 lastTime = now;
+
+                if (turnQueue.Count > 0)
+                {
+                    curState = TurnState.Acting;
+                    yield break;
+                }
             }
 
             yield return null;
@@ -87,15 +133,25 @@ public class TurnManager : MonoBehaviour
     }
     IEnumerator HandleActingState()
     {
-        Debug.Log($" {currentCharacter.name} 행동 선택 대기");
-        cameraController.ZoomToCharacterTile(currentCharacter.currentTile);
+        while (turnQueue.Count > 0)
+        {
+            Character actingChar = turnQueue[0];
+            turnQueue.RemoveAt(0);
 
-        currentCharacter.HasSelectedAction = false; // 초기화 필요
-        currentCharacter.ShowActionUI(true); // 패널 띄우기
-        yield return new WaitUntil(() => currentCharacter.HasSelectedAction);
-        currentCharacter.ShowActionUI(false); //  패널 숨기기
+            if (actingChar == null || actingChar.isDie) continue;
 
-        yield return new WaitUntil(() => !isActing);
+            Debug.Log($" {actingChar.name} 행동 선택 대기");
+            cameraController.ZoomToCharacterTile(actingChar.currentTile);
+
+            actingChar.HasSelectedAction = false;
+            actingChar.ShowActionUI(true);
+
+            yield return new WaitUntil(() => actingChar.HasSelectedAction);
+            actingChar.ShowActionUI(false);
+
+            yield return new WaitUntil(() => !isActing);
+        }
+
         curState = TurnState.Ready;
         yield return null;
     }

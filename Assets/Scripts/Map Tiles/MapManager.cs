@@ -23,6 +23,7 @@ public class MapManager : MonoBehaviour
         isGenerating = true;
         GenerateMap();
         yield return new WaitUntil(() => isGenerating == false);
+        yield return StartCoroutine(characterSpawner.SpawnCharactersWithEffect());
     }
     public void GenerateMap()
     {
@@ -63,12 +64,13 @@ public class MapManager : MonoBehaviour
         }
 
         Invoke("EnableInput", lastDelay + 0.5f);
+        
     }
 
     void EnableInput()
     {
         isGenerating = false;
-        characterSpawner.SpawnCharacters();
+        // characterSpawner.SpawnCharacters();
     }
     public GridTile GetTile(Vector2Int pos)
     {
