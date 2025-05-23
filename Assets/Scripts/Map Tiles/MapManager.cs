@@ -13,11 +13,13 @@ public class MapManager : MonoBehaviour
 
     public static bool isGenerating = true; // 전역에서 체크 가능하게 static
 
+    public Transform mapRoot; // 맵 오브젝트 참조
     public GridTile[,] grid;
 
-    //부모 오브젝트 정리만을 위한 변수
-    private Transform tileParent;
-
+    void Start()
+    {
+        BuildGridFromHierarchy();
+    }
     public IEnumerator GenerateMapCoroutine()
     {
         isGenerating = true;
@@ -25,15 +27,29 @@ public class MapManager : MonoBehaviour
         yield return new WaitUntil(() => isGenerating == false);
         yield return StartCoroutine(characterSpawner.SpawnCharactersWithEffect());
     }
+    void BuildGridFromHierarchy()
+    {
+        height = mapRoot.childCount; // 필드에 직접 대입
+        width = mapRoot.GetChild(0).childCount;
+
+        grid = new GridTile[width, height];
+
+        for (int y = 0; y < height; y++)
+        {
+            Transform row = mapRoot.GetChild(y);
+            for (int x = 0; x < row.childCount; x++)
+            {
+                GridTile tile = row.GetChild(x).GetComponent<GridTile>();
+                tile.gameObject.SetActive(false);
+                grid[x, y] = tile;
+
+                tile.gridPos = new Vector2Int(x, y);
+            }
+        }
+    }
     public void GenerateMap()
     {
-        width = Random.Range(5, 15);
-        height = Random.Range(5, 15);
-        tileParent = new GameObject("TileContainer").transform;
-        grid = new GridTile[width, height];
-        float xoffset = 0.45f;
-        float yoffset = 0.2f;
-        int z = 0;
+        BuildGridFromHierarchy();
 
         float lastDelay = 0f;
         float delaytime = 0.1f;
@@ -43,28 +59,24 @@ public class MapManager : MonoBehaviour
         {
             for (int x = 0; x < width; x++)
             {
-                Vector3 finalPos = new Vector3(x * xoffset - xoffset * y + offset, x * yoffset + y * yoffset + offset, z++);
+                var tile = grid[x, y].GetComponent<GridTile>();
+                tile.gameObject.SetActive(true);
+
+                Vector3 finalPos = tile.transform.position;
                 Vector3 spawnPos = finalPos + animStartPos;
-
-                GameObject obj = Instantiate(tilePrefab, spawnPos, Quaternion.identity, tileParent); // 부모 설정
-                // obj.GetComponent<SpriteRenderer>().sortingOrder = z--;
-
-                var tile = obj.GetComponent<GridTile>();
-                tile.x = x;
-                tile.y = y;
-                grid[x, y] = tile;
+                tile.transform.position = spawnPos;
 
                 float delay = (x + y) * delaytime;
                 lastDelay = Mathf.Max(lastDelay, delay);
 
-                obj.transform.DOMoveY(finalPos.y, dotweenTime)
+                tile.transform.DOMoveY(finalPos.y, dotweenTime)
                     .SetEase(Ease.OutBack)
                     .SetDelay(delay);
             }
         }
 
         Invoke("EnableInput", lastDelay + 0.5f);
-        
+
     }
 
     void EnableInput()

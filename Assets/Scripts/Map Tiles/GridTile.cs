@@ -3,12 +3,12 @@ using UnityEngine;
 public class GridTile : MonoBehaviour
 {
     [Header("타일 정보")]
-    public int x;
-    public int y;
     private SpriteRenderer spriteRenderer;
     public System.Action OnTileClicked;
     public Character currentCharacter;
+    public Vector2Int gridPos;
     bool isHighlighted = false; // 행동하고 있을 시
+    public GameObject SetHighlightGameObject;
 
     void Awake()
     {
@@ -18,7 +18,7 @@ public class GridTile : MonoBehaviour
     public void SetHighlight(bool on)
     {
         if(!isHighlighted)
-            spriteRenderer.color = on ? Color.blue : Color.white;
+            SetHighlightGameObject.SetActive(on);
     }
     public void SetCanGo(bool on)
     {

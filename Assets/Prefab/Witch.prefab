@@ -140,8 +140,7 @@ MonoBehaviour:
   CRI: 0
   turnGauge: 0
   skillDatas: []
-  spriteOffset: {x: -0.84, y: -0.21}
-  gridPos: {x: 0, y: 0}
+  spriteOffset: {x: 0.017, y: -0.266}
   actionPanel: {fileID: 669006183906389487}
   actionPanelReturnPanel: {fileID: 4302919097790612085}
   turnGaugeImage: {fileID: 8783136670129452397}
@@ -303,7 +302,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3133540146267415968, guid: e489230c6a721ea40a0768488337e252, type: 3}
       propertyPath: m_PresetInfoIsWorld
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3155533751220622090, guid: e489230c6a721ea40a0768488337e252, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -502,7 +501,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2494872674988958970, guid: cfed9fe54ca315647bbdaa721fa3ecf3, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 1.11
+      value: 0.23
       objectReference: {fileID: 0}
     - target: {fileID: 2494872674988958970, guid: cfed9fe54ca315647bbdaa721fa3ecf3, type: 3}
       propertyPath: m_AnchoredPosition.y
