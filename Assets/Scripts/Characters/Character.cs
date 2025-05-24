@@ -55,9 +55,11 @@ public class Character : MonoBehaviour
     public int AGI;
     public int CRI;
     public float turnGauge = 0f; // 0 ~ 100
+    [Header("Equipment")]
+    public List<WeaponData> Equipments = new();
 
     [Header("Skill")]
-    public List<SkillData> skillDatas;
+    public List<SkillData> skillDatas = new();
 
     public Vector2 spriteOffset;
 
@@ -88,9 +90,11 @@ public class Character : MonoBehaviour
     void Start()
     {
         animator = GetComponent<Animator>();
-        turnManager = FindObjectOfType<TurnManager>();
-        mapManager = FindObjectOfType<MapManager>();
         spriteRenderer = GetComponent<SpriteRenderer>();
+        foreach(var equipment in Equipments)
+        {
+            equipment.PlusStats(this);
+        }
         if (actionPanel != null)
         {
             // 원래 스케일 저장
@@ -115,6 +119,11 @@ public class Character : MonoBehaviour
             actionPanelReturnPanelCanvasGroup.alpha = 0f;
             actionPanelReturnPanel.SetActive(false);
         }
+    }
+    void OnEnable()
+    {
+        turnManager = FindObjectOfType<TurnManager>();
+        mapManager = FindObjectOfType<MapManager>();
     }
     public void InitializeFromData()
     {

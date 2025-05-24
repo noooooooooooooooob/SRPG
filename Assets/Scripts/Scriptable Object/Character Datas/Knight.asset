@@ -18,9 +18,9 @@ MonoBehaviour:
   SP: 100
   SPEED: 100
   ATK: 100
-  ATKRange: 1
+  ATKRange: 10
   MAG: 10
   DEF: 10
-  AGI: 15
+  AGI: 10
   CRI: 10
   basicSkill: {fileID: 0}
