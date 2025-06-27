@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System;
+using UnityEngine.UI;
 
 public class PriorityQueue<T>
 {
@@ -60,6 +61,8 @@ public class Character : MonoBehaviour
 
     [Header("Skill")]
     public List<SkillData> skillDatas = new();
+    public GameObject skillPanel;
+    public List<Button> skillButtons;
 
     public Vector2 spriteOffset;
 
@@ -144,9 +147,7 @@ public class Character : MonoBehaviour
         DEF = basicData.DEF;
         AGI = basicData.AGI;
         CRI = basicData.CRI;
-
-        skillDatas.Add(basicData.basicSkill);
-
+        
         ResetGauge();
     }
     public void IncreaseGauge(float amount)
@@ -259,6 +260,16 @@ public class Character : MonoBehaviour
         ShowActionReturnUI(true);
         ShowAttackableTiles();
     }
+    public void OnClickSkill() // Skill 클릭 시
+    {
+        ShowActionUI(false); // UI 닫기
+        showSkillUI(true);
+        ShowActionReturnUI(true);
+    }
+    void showSkillUI(bool show)
+    {
+        skillPanel.SetActive(show);
+    }
     public void OnClickRest() // Rest 클릭 시
     {
         ShowActionUI(false); // UI 닫기
@@ -268,6 +279,7 @@ public class Character : MonoBehaviour
     public void OnClickReturn() // 행동 취소 시
     {
         ShowActionReturnUI(false);
+        showSkillUI(false);
         ClearPreviousTiles();
         ShowActionUI(true);
     }

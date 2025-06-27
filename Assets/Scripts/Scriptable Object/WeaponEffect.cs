@@ -1,12 +1,7 @@
 using UnityEngine;
 
-public interface IWeaponEffect
-{
-    void ApplyEffect(Character user, Character target);
-}
-
 [CreateAssetMenu(fileName = "WeaponEffect", menuName = "Scriptable Objects/WeaponEffect")]
-public abstract class WeaponEffect : ScriptableObject, IWeaponEffect
+public abstract class WeaponEffect : ScriptableObject
 {
     public abstract void ApplyEffect(Character user, Character target);
 }

@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 59c755be0391c73429bc442ae2dee2ae, type: 3}
   m_Name: Test Weapon
   m_EditorClassIdentifier: 
+  equipmentType: 0
   name: Test
-  effects:
-  - {fileID: 11400000, guid: 19209902d02fd02438b850085cc07760, type: 2}
+  effects: []
   HP: 1
   SP: 1
   SPEED: 1
