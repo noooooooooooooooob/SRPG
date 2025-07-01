@@ -65,17 +65,10 @@ public class CameraController : MonoBehaviour
             Vector2 mouseWorld = cam.ScreenToWorldPoint(Input.mousePosition);
             RaycastHit2D hit = Physics2D.Raycast(mouseWorld, Vector2.zero);
 
-            if (hit.collider != null && hit.collider.TryGetComponent<GridTile>(out var tile))
+            if (hit.collider != null && hit.collider.TryGetComponent<Character>(out var character))
             {
                 if (highlightedTile != null)
                     highlightedTile.SetHighlight(false);
-
-                highlightedTile = tile;
-                tile.SetHighlight(true);
-
-                // DOTween으로 부드러운 카메라 이동
-                Vector3 target = ClampToBounds(new Vector3(tile.transform.position.x, tile.transform.position.y, cam.transform.position.z));
-                cam.transform.DOMove(target, 0.4f).SetEase(Ease.OutCubic);
             }
         }
     }

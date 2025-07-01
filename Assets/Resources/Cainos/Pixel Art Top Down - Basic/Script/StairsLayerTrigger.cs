@@ -41,7 +41,7 @@ namespace Cainos.PixelArtTopDown_Basic
         private void SetLayerAndSortingLayer( GameObject target, string layer, string sortingLayer )
         {
             Debug.Log($"{target.name} Set Layer to {layer}");
-            target.layer = LayerMask.NameToLayer(layer);
+            // target.layer = LayerMask.NameToLayer(layer);
 
             target.GetComponent<SpriteRenderer>().sortingLayerName = sortingLayer;
             SpriteRenderer[] srs = target.GetComponentsInChildren<SpriteRenderer>();
