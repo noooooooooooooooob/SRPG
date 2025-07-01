@@ -47,6 +47,22 @@ public class CharacterSpawner : MonoBehaviour
             GameObject obj = Instantiate(prefab, spawnPos, Quaternion.identity);
             obj.name = prefab.name;
 
+            // 캐릭터의 레이어 정보 복사
+            SpriteRenderer tileRenderer = tile.GetComponent<SpriteRenderer>();
+            if (tileRenderer != null)
+            {
+                string sortingLayer = tileRenderer.sortingLayerName;
+                int sortingOrderBase = tileRenderer.sortingOrder + 1;
+
+                // 캐릭터의 모든 SpriteRenderer에 레이어 적용
+                SpriteRenderer[] charRenderers = obj.GetComponentsInChildren<SpriteRenderer>(true);
+                for (int i = 0; i < charRenderers.Length; i++)
+                {
+                    charRenderers[i].sortingLayerName = sortingLayer;
+                    charRenderers[i].sortingOrder = sortingOrderBase + i; // 순서 충돌 방지
+                }
+            }
+
             // 🎬 등장 연출
             obj.transform.localScale = Vector3.zero;
             obj.transform.DOScale(1f, 0.3f).SetEase(Ease.OutBack); // 튕기듯 등장
@@ -73,7 +89,7 @@ public class CharacterSpawner : MonoBehaviour
             int y = Random.Range(0, mapManager.height);
 
             GridTile tile = GetTile(new Vector2Int(x, y));
-            if (tile.currentCharacter != null) continue; // 캐릭터 중복 방지
+            if (tile.currentCharacter != null || tile.tileType != TileType.Positive) continue; // 캐릭터 중복 방지
             return new Vector2Int(x, y);
         }
 

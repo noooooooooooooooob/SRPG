@@ -29,7 +29,6 @@ public class CameraController : MonoBehaviour
 
     void Update()
     {
-        if (MapManager.isGenerating) return;
         HandleRightClickDrag();
         HandleLeftClickTileSelect();
         HandleScrollZoom();

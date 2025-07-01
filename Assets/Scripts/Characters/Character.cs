@@ -79,12 +79,9 @@ public class Character : MonoBehaviour
     [Header("Tiles")]
     private List<GridTile> movableTiles = new();
     private List<GridTile> attackableTiles = new();
-    private Dictionary<GridTile, GridTile> cameFrom = new();
-    private List<GridTile> pathToTarget = new();
     public GridTile currentTile;
     [Header("Animation")]
     Animator animator;
-    public Sprite hitSprite;
     Character attackTargetCharacter;
     public bool isDie = false;
     TurnManager turnManager;
@@ -94,7 +91,7 @@ public class Character : MonoBehaviour
     {
         animator = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
-        foreach(var equipment in Equipments)
+        foreach (var equipment in Equipments)
         {
             equipment.PlusStats(this);
         }
@@ -102,7 +99,6 @@ public class Character : MonoBehaviour
         {
             // 원래 스케일 저장
             originalScale = actionPanel.transform.localScale;
-
 
             // CanvasGroup 확인
             actionPanelCanvasGroup = actionPanel.GetComponent<CanvasGroup>();
@@ -147,8 +143,16 @@ public class Character : MonoBehaviour
         DEF = basicData.DEF;
         AGI = basicData.AGI;
         CRI = basicData.CRI;
-        
+
         ResetGauge();
+    }
+    public void setLayer(string layerName)
+    {
+        SpriteRenderer[] spriteRenderers = gameObject.GetComponentsInChildren<SpriteRenderer>();
+        foreach (var spriteRenderer in spriteRenderers)
+        {
+            spriteRenderer.sortingLayerName = layerName;
+        }
     }
     public void IncreaseGauge(float amount)
     {
@@ -311,7 +315,7 @@ public class Character : MonoBehaviour
 
             GridTile next = grid[nx, ny];
 
-            if (visited.Contains(next))
+            if (visited.Contains(next) || next.tileType == TileType.Negative)
                 continue;
 
             visited.Add(next);
@@ -350,65 +354,32 @@ public class Character : MonoBehaviour
         ClearPreviousTiles();
 
         int range = AGI;
-        Queue<(int x, int y, int dist)> queue = new();
+        Queue<(GridTile tile, int dist)> queue = new();
         HashSet<GridTile> visited = new();
 
-        int originX = currentTile.gridPos.x;
-        int originY = currentTile.gridPos.y;
+        queue.Enqueue((currentTile, 0));
+        visited.Add(currentTile);
 
-        GridTile[,] grid = mapManager.grid; // 반드시 map에 grid 접근 가능해야 함
-        int width = mapManager.width;
-        int height = mapManager.height;
-
-        // 4방향
-        int[] dx = { 1, -1, 0, 0 };
-        int[] dy = { 0, 0, 1, -1 };
-        for (int i = 0; i < 4; i++)
-        {
-            int nx = originX + dx[i];
-            int ny = originY + dy[i];
-
-            if (nx < 0 || ny < 0 || nx >= width || ny >= height)
-                continue;
-
-            GridTile next = grid[nx, ny];
-
-            if (visited.Contains(next))
-                continue;
-
-            if (next.currentCharacter == null) // 갈 수 있는 타일만
-            {
-                visited.Add(next);
-                queue.Enqueue((nx, ny, 1));
-            }
-        }
         while (queue.Count > 0)
         {
-            var (x, y, dist) = queue.Dequeue();
+            var (tile, dist) = queue.Dequeue();
             if (dist > range) continue;
 
-            GridTile tile = grid[x, y];
-            movableTiles.Add(tile);
-            tile.SetCanGo(true);
-            tile.OnTileClicked = () => MoveTo(tile); // 클릭 시 이동
-
-            for (int i = 0; i < 4; i++)
+            if (tile != currentTile)
             {
-                int nx = x + dx[i];
-                int ny = y + dy[i];
+                movableTiles.Add(tile);
+                tile.SetCanGo(true);
+                tile.OnTileClicked = () => MoveTo(tile);
+            }
 
-                if (nx < 0 || ny < 0 || nx >= width || ny >= height)
-                    continue;
-
-                GridTile next = grid[nx, ny];
-
-                if (visited.Contains(next))
-                    continue;
-
-                if (next.currentCharacter == null) // 갈 수 있는 타일만
+            foreach (var neighbor in GetNeighbors(tile))
+            {
+                if (neighbor.currentCharacter == null &&
+                    neighbor.tileType != TileType.Negative &&
+                    !visited.Contains(neighbor))
                 {
-                    visited.Add(next);
-                    queue.Enqueue((nx, ny, dist + 1));
+                    visited.Add(neighbor);
+                    queue.Enqueue((neighbor, dist + 1));
                 }
             }
         }
@@ -436,8 +407,7 @@ public class Character : MonoBehaviour
     }
     IEnumerator MoveAlongPath(GridTile targetTile)
     {
-        // 경로 계산 (현재 위치에서 targetTile까지)
-        List<GridTile> path = FindPath(currentTile, targetTile); // 아래에서 정의
+        List<GridTile> path = FindPath(currentTile, targetTile);
         if (path == null || path.Count == 0)
         {
             Debug.LogWarning("경로가 없습니다.");
@@ -447,10 +417,7 @@ public class Character : MonoBehaviour
         foreach (var tile in path)
         {
             Vector3 targetPos = tile.transform.position + (Vector3)spriteOffset;
-            if (targetPos.x < transform.position.x)
-                spriteRenderer.flipX = true;
-            else
-                spriteRenderer.flipX = false;
+            spriteRenderer.flipX = targetPos.x < transform.position.x;
 
             float duration = 0.2f;
             transform.DOMove(targetPos, duration).SetEase(Ease.Linear);
@@ -461,7 +428,7 @@ public class Character : MonoBehaviour
             currentTile.currentCharacter = this;
         }
 
-        SelectAction(); // 이동 끝났을 때 행동 완료 처리
+        SelectAction();
     }
     private int Heuristic(GridTile a, GridTile b) // 맨해튼 거리
     {
@@ -485,7 +452,6 @@ public class Character : MonoBehaviour
 
         var openSet = new PriorityQueue<GridTile>();
         var cameFrom = new Dictionary<GridTile, GridTile>();
-
         var gScore = new Dictionary<GridTile, int>();
         var fScore = new Dictionary<GridTile, int>();
 
@@ -502,8 +468,8 @@ public class Character : MonoBehaviour
 
             foreach (var neighbor in GetNeighbors(current))
             {
-                if (neighbor.currentCharacter != null && neighbor != goal)
-                    continue; // 캐릭터 있는 타일은 못 감 (단, 목표는 예외)
+                if (neighbor.currentCharacter != null && neighbor != goal) continue;
+                if (neighbor.tileType == TileType.Negative) continue;
 
                 int tentativeG = gScore[current] + 1;
 
@@ -518,7 +484,7 @@ public class Character : MonoBehaviour
             }
         }
 
-        return null; // 경로 없음
+        return null;
     }
 
     private IEnumerable<GridTile> GetNeighbors(GridTile tile)
@@ -529,17 +495,21 @@ public class Character : MonoBehaviour
         int height = mapManager.height;
         GridTile[,] grid = mapManager.grid;
 
-        int[] dx = { 1, -1, 0, 0 };
-        int[] dy = { 0, 0, 1, -1 };
+        // 위
+        if (tile.canGoUp && y + 1 < height)
+            yield return grid[x, y + 1];
 
-        for (int i = 0; i < 4; i++)
-        {
-            int nx = x + dx[i];
-            int ny = y + dy[i];
+        // 아래
+        if (tile.canGoDown && y - 1 >= 0)
+            yield return grid[x, y - 1];
 
-            if (nx >= 0 && ny >= 0 && nx < width && ny < height)
-                yield return grid[nx, ny];
-        }
+        // 왼쪽
+        if (tile.canGoLeft && x - 1 >= 0)
+            yield return grid[x - 1, y];
+
+        // 오른쪽
+        if (tile.canGoRight && x + 1 < width)
+            yield return grid[x + 1, y];
     }
 
     public void AttackTo(GridTile targetTile)
