@@ -144,10 +144,10 @@ public class TurnManager : MonoBehaviour
             cameraController.ZoomToCharacterTile(actingChar.currentTile);
 
             actingChar.HasSelectedAction = false;
-            actingChar.ShowActionUI(true);
+            actingChar.characterUI.ShowActionUI(true);
 
             yield return new WaitUntil(() => actingChar.HasSelectedAction);
-            actingChar.ShowActionUI(false);
+            actingChar.characterUI.ShowActionUI(false);
 
             yield return new WaitUntil(() => !isActing);
         }

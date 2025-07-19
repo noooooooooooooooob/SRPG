@@ -15,8 +15,4 @@ public class CharacterData : ScriptableObject
     public int DEF;
     public int AGI;
     public int CRI;
-
-    [Header("기본 스킬")]
-    public SkillData basicSkill;
-
 }

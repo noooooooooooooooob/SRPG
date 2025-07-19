@@ -99,6 +99,8 @@ GameObject:
   - component: {fileID: 7107993692754306678}
   - component: {fileID: 4861957477937466481}
   - component: {fileID: 5094634002169949655}
+  - component: {fileID: 5946800743471336674}
+  - component: {fileID: 8080278442534069975}
   - component: {fileID: 6674416447052503720}
   - component: {fileID: 4944388290674286689}
   - component: {fileID: -5289999745099093928}
@@ -212,8 +214,6 @@ MonoBehaviour:
   turnGauge: 0
   Equipments:
   - {fileID: 11400000, guid: e373b1c94a16d3442a1d1a967c150b66, type: 2}
-  skillDatas:
-  - {fileID: 11400000, guid: 60a5dbaec96ccce41ba5a3ffdb10cb60, type: 2}
   skillPanel: {fileID: 264513674198658954}
   skillButtons:
   - {fileID: 8162717982404173320}
@@ -221,13 +221,43 @@ MonoBehaviour:
   - {fileID: 6193055364264677877}
   - {fileID: 1534044249913200250}
   spriteOffset: {x: -0.032, y: 0.64}
+  HasSelectedAction: 0
+  currentTile: {fileID: 0}
+  attackTargetCharacter: {fileID: 0}
+  characterAnimation: {fileID: 5946800743471336674}
+  characterUI: {fileID: 8080278442534069975}
+  isDie: 0
+--- !u!114 &5946800743471336674
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2616228559299370832}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 60dc1c2084912a54caf87330e3db6857, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  character: {fileID: 5094634002169949655}
+--- !u!114 &8080278442534069975
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2616228559299370832}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f32f5182c396e55439769509b3510623, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  character: {fileID: 5094634002169949655}
   actionPanel: {fileID: 2981933024686787008}
+  skillPanel: {fileID: 264513674198658954}
   actionPanelReturnPanel: {fileID: 1310955288752533346}
   turnGaugeImage: {fileID: 4402237748957137364}
   HPBarImage: {fileID: 6294025916265225717}
-  HasSelectedAction: 0
-  currentTile: {fileID: 0}
-  isDie: 0
 --- !u!95 &6674416447052503720
 Animator:
   serializedVersion: 7
@@ -470,7 +500,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 5094634002169949655}
+      objectReference: {fileID: 8080278442534069975}
     - target: {fileID: 8162829669784181047, guid: cc45ae1e32e60c7488c2e6f94f9687bb,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
@@ -484,7 +514,7 @@ PrefabInstance:
     - target: {fileID: 8162829669784181047, guid: cc45ae1e32e60c7488c2e6f94f9687bb,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: Character, Assembly-CSharp
+      value: CharacterUI, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 8162829669784181047, guid: cc45ae1e32e60c7488c2e6f94f9687bb,
         type: 3}
@@ -961,7 +991,17 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 5094634002169949655}
+      objectReference: {fileID: 8080278442534069975}
+    - target: {fileID: 290562614612397085, guid: e489230c6a721ea40a0768488337e252,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnClickRest
+      objectReference: {fileID: 0}
+    - target: {fileID: 290562614612397085, guid: e489230c6a721ea40a0768488337e252,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: CharacterUI, Assembly-CSharp
+      objectReference: {fileID: 0}
     - target: {fileID: 709134223970514789, guid: e489230c6a721ea40a0768488337e252,
         type: 3}
       propertyPath: m_Layer
@@ -986,26 +1026,41 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 5094634002169949655}
+      objectReference: {fileID: 8080278442534069975}
+    - target: {fileID: 3155533751220622090, guid: e489230c6a721ea40a0768488337e252,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: CharacterUI, Assembly-CSharp
+      objectReference: {fileID: 0}
     - target: {fileID: 3729919972211076998, guid: e489230c6a721ea40a0768488337e252,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 5094634002169949655}
+      objectReference: {fileID: 8080278442534069975}
     - target: {fileID: 3729919972211076998, guid: e489230c6a721ea40a0768488337e252,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: OnClickAttack
       objectReference: {fileID: 0}
+    - target: {fileID: 3729919972211076998, guid: e489230c6a721ea40a0768488337e252,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: CharacterUI, Assembly-CSharp
+      objectReference: {fileID: 0}
     - target: {fileID: 4786506131228116127, guid: e489230c6a721ea40a0768488337e252,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 5094634002169949655}
+      objectReference: {fileID: 8080278442534069975}
     - target: {fileID: 4786506131228116127, guid: e489230c6a721ea40a0768488337e252,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: OnClickSkill
+      objectReference: {fileID: 0}
+    - target: {fileID: 4786506131228116127, guid: e489230c6a721ea40a0768488337e252,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: CharacterUI, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 5313321014141615020, guid: e489230c6a721ea40a0768488337e252,
         type: 3}
